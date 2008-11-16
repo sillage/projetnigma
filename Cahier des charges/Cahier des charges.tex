@@ -8,15 +8,21 @@
 \title{Cahier des charges du ProjetNigma}
 \author{CrypTeam}
 \pagestyle{myheadings}
-\date{}				
+\date{}
 
 \begin{document}
 	\markright{Cahier des charges de la CrypTeam}
 	\maketitle{}
   	\tableofcontents
-	\newpage				
+	\newpage
 	\part{Introduction}
 	%introduction rapide
+        \section {Présentation de la CrypTeam}
+        \section {Présentation individuelle}
+        \subsection{Guillaume LAPOTRE}
+        \subsection{Justin GANIVET}
+        \subsection{Stéphane LADEVIE}
+        \subsection{Sébastien GISLAIS}
 	\newpage
 	\part{\'{E}tat de l'art}
 		La cryptographie et la stéganographie sont deux techniques extrêmement ancienne permettant de transmettre des informations uniquement aux personnes voulues.
@@ -25,7 +31,7 @@
 
 	La stéganographie consiste à cacher le message à transmettre plutot que de le chiffrer. Comme exemple historique on peut citer un procédé utilisé par César, il écrivait sur le crane d'un esclave un message puis attendait que les cheveux de cet esclave repoussent puis il envoyait l'esclave à la personne à qui le message était destiné. Il suffisait donc de raser l'esclave pour récupérer le message.
 
-	Cepandant, la stéganographie ainsi que la cryptographie étaient utilisée quasiment uniquement par les militaires avant la fin de la Seconde Guerre Mondiale. Depuis, il y a énormément d'application civile au chiffrement 
+	Cepandant, la stéganographie ainsi que la cryptographie étaient utilisée quasiment uniquement par les militaires avant la fin de la Seconde Guerre Mondiale. Depuis, il y a énormément d'application civile au chiffrement
 		\section{Cryptographie}
 			\subsection{Cryptage par substitution}
 	Le cryptage par substitution  est une des technique les plus basique et les plus ancienne de chiffrement. Le chiffre de César est une technique de cryptage par substitution. Il existe plusieurs types de substitution pour chiffrer des données.
@@ -36,10 +42,10 @@
 	\subsubsection{Le codage par substitution poly-alphabétique}
 	Le chiffre de Vigenère en est un exemple. On crée un mot qui sert de clé et "on le colle en dessous du texte à chiffrer". Pour chiffrer ou déchiffrer un message on utilise une matrice 26x26 avec l'alphabet sur la première ligne et sur la première colonne. Ensuite on chiffre chaque lettre à l'aide de la lettre de la clé que l'on a disposé juste en dessous avec la matrice ci-dessous.
 \begin{center}
-	\includegraphics[scale=0.75]{../Image/matrice.jpg}  
+	\includegraphics[scale=0.75]{../Image/matrice.jpg}
 \end{center}
 	Exemple : Chiffrons le mot Poney à l'aide de la clé EPITA : \\ P o n e y \\E P I T A \\
-	Poney chiffré avec cette clé : 
+	Poney chiffré avec cette clé :
 \begin{itemize}
 \item P crypté avec la lettre E : T
 \item O crypté avec la lettre P : D
@@ -55,13 +61,13 @@
 
 			\subsection{Cryptage asymétrique}
 			\subsubsection{RSA}
-		
+
 		\section{Stéganographie}
 	\newpage
 	\part{Répartition des charges}
 %descriptif précis
-	\newpage	
-	\part{Planning de Réalisation} %aligné sur les dates de soutenance	
+	\newpage
+	\part{Planning de Réalisation} %aligné sur les dates de soutenance
 	\newpage
 	\part{Conclusion}
 	\newpage
