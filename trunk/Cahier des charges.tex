@@ -2,6 +2,7 @@
 
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
 
 
 \title{Cahier des charges du ProjetNigma}
@@ -23,7 +24,29 @@
  La cryptographie protège le message en le chiffrant, c'est-à-dire en le rendant incompréhensible sans connaitre l'algorithme de cryptage. On peut citer comme procédé de cryptage historique le chiffre de César qui décale l'alphabet de n rang suivant le chiffre choisi (ainsi si le chiffre choisi est 3, l'alphabet sera : DEFGHI...ZABC).
 
 	La stéganographie consiste à cacher le message à transmettre plutot que de le chiffrer. Comme exemple historique on peut citer un procédé utilisé par César, il écrivait sur le crane d'un esclave un message puis attendait que les cheveux de cet esclave repoussent puis il envoyait l'esclave à la personne à qui le message était destiné. Il suffisait donc de raser l'esclave pour récupérer le message.
+
+	Cepandant, la stéganographie ainsi que la cryptographie étaient utilisée quasiment uniquement par les militaires avant la fin de la Seconde Guerre Mondiale. Depuis, il y a énormément d'application civile au chiffrement 
 		\subsection{Cryptographie}
+			\subsubsection{Cryptage par substitution}
+	Le cryptage par substitution  est une des technique les plus basique et les plus ancienne de chiffrement. Le chiffre de César est une technique de cryptage par substitution. Il existe plusieurs types de substitution pour chiffrer des données.
+
+	Le codage par substitution mono-alphabétique : On remplace chaque lettres de l'alphabet par une autre lettre. Ainsi pour la première lettre il y a 26 possibilités, pour la seconde 25 possibilités etc\dots Il existe donc 26! façons de coder distinctes. L'inconvénient de la substitution mono-alphabétique est qu'il faut se souvenir de chaque substitutions pour chaques lettres. L'autre inconvénient est qu'en connaissant la langue du message codé on peut relativement facilement déchiffrer le message en se basant sur la fréquence d'apparition de chaque lettre dans une langue. Par exemple en français la lettre apparaissant le plus souvent est le E, en analysant un texte chiffré avec cette technique de chiffrement, on peut trouver la lettre qui apparait la plus souvent et l'associer donc à la lettre E. Ensuite on utilise le même raisonnement pour toute les autres lettres.
+
+	Le codage par substitution poly-alphabétique : Le chiffre de Vigenère en est un exemple. On crée un mot qui sert de clé et "on le colle en dessous du texte à chiffrer". Pour chiffrer ou déchiffrer un message on utilise une matrice 26x26 avec l'alphabet sur la première ligne et sur la première colonne. Ensuite on chiffre chaque lettre à l'aide de la lettre de la clé que l'on a disposé juste en dessous avec la matrice ci-dessous.
+\begin{center}
+	\includegraphics[scale=0.75]{../Images/matrice.jpg} 
+\end{center}
+	Exemple : Chiffrons le mot Poney à l'aide de la clé EPITA : \\ P o n e y \\E P I T A \\
+	Poney chiffré avec cette clé : 
+\begin{itemize}
+\item P crypté avec la lettre E : T
+\item O crypté avec la lettre P : D
+\item N crypté avec la lettre I : V
+\item E crypté avec la lettre T : X
+\item Y crypté avec la lettre A : Y
+\end{itemize}
+	Poney crypté à l'aide de la clé EPITA avec le chiffre de Vigenère donne TDVXY !
+
 			\subsubsection{Cryptage symétrique}
 
 			\subsubsection{Cryptage asymétrique}
@@ -34,4 +57,9 @@
 %descriptif précis	
 	\section{Planning de Réalisation} %aligné sur les dates de soutenance	
 	\section{Conclusion}
+	\section*{Source}
+		\begin{itemize}
+			\item  http://www.bibmath.net/crypto/
+		\end{itemize}
+
 \end{document}
