@@ -1,0 +1,10 @@
+ Le RSA est un algorithme méthode de cryptographie inventée en 1977 par  Ron Rivest, Adi Shamir, Len Adleman (d'où le nom de RSA). C'est encore le système cryptographique à clé publique le plus utilisé de nos jours.
+
+Petite anecdote : Au départ, Rivest, Shamir et Adleman voulaient prouver que tout système à clé plublique possède une faille, c'est ainsi qu'ils ont créé le RSA !
+
+ Son principe de fonctionnement suit 4 étapes : \\
+ Tout d'abord il y a la création des clés(que l'on nommera p,q,e et d). P et Q sont deux grands nombres premiers distincts. Leur génération se fait au hasard en utilisant un algorithme de test de primalité probabiliste. C'est un algorithme qui determine si un nombre est probablement premier selon le degré de probabilité que l'on a fixé dans l'algorithme. En cryptographie, on se "contente" d'avoir un nombre dont on sait qu'il est premier avec une probabilité supérieur à \begin{math} 1- \frac{1}{2^{100}} \end{math}. E est un entier premier avec le produit (P-1)(Q-1). D est tel que ED = 1 mod (P-1)(Q-1) donc que ED -1 est un multiple de(P-1)(Q-1). On peut fabriquer D à partir de E, P et Q en utilisant l'algorithme d'Euclide.
+
+Ensuite il faut distribuer les clés. Le couple (n,e) constitue la clé publique. Elle est disponible pour toute personne voulant crypter un message afin de nous l'envoyer ensuite. Le couple (n,d) constitue notre clé privée que l'on garde secrète. Si une personne désire nous envoyer un message codé, elle le représente sous la forme de plusieurs entiers M compris entre 0 et n-1. Elle possède notre clé publique (n,e) et calcule \begin{math}C = M^{e} mod n\end{math}. C'est ce dernier nombre qu'elle nous envoie.
+
+Nous recevons donc C et on calcule grace à notre clé privée \begin{math}D = C^{d} mod n\end{math}. D'après un théorème d'Euler \begin{math}D=M^{de}=M mod n\end{math}. On a donc reconstitué le message.
