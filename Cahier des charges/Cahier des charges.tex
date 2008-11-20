@@ -29,7 +29,7 @@
 
 \subsection{Guillaume LAPÔTRE}
 
-Actuellement étudiant en Info-spé à EPITA, j'entame avec réjouissance ce fabuleux projet à la fois utile et pédagogique. En effet, la cryptographie m'a toujours attiré. Mais je n'ai jamais eut l'occasion de m'y interressé de plus près. La stéganographie n'était pas mon idée mais je l'ai trouvé assez interressante. Ainsi je pourrais découvrir des principes algorithmiques pour chiffrer et déchiffrer des messages puis les cacher dans une image ! 
+Actuellement étudiant en Info-spé à EPITA, j'entame avec réjouissance ce fabuleux projet à la fois utile et pédagogique. En effet, la cryptographie m'a toujours attiré. Mais je n'ai jamais eut l'occasion de m'y interressé de plus près. La stéganographie n'était pas mon idée mais je l'ai trouvé assez interressante. Ainsi je pourrais découvrir des principes algorithmiques pour chiffrer et déchiffrer des messages puis les cacher dans une image !
 
 \subsection{Justin GANIVET}
 
@@ -177,8 +177,84 @@ Ensuite il faut distribuer les clés. Le couple $(n, e)$ constitue la clé publi
 Nous recevons donc $C$ et on calcule $D$ grâce à notre clé privée : $D = C^{d} \textrm{ mod } n$. D'après un théorème d'Euler $D = M^{de} = M \textrm{ mod } n$. On a donc reconstitué le message.
 
 \section{Stéganographie}
+\subsection{Stéganographie des temps anciens}
+
+
+La stéganographie existe depuis des temps immemoriaux. Comme dit dans l’introduction, elle remonte jusqu'à l’époque de César!  Xeres, le roi de Perse eu aussi l’idée d’écrire sur le bois d’une tablette de cire et d’ensuite la recouvrir de cire. Ainsi la tablette semblait neuve et le message cache.\\
+
+
+Tout le monde se souvient dans son enfance du numéro de Pif gadget ou était explique le moyen de créer de l’encre sympathique. En effet avec du jus de citron ou du lait comme encre, le message écrit devient invisible. Grace à une bougie ou une solution chimique on peut révéler le message secret.\\
+
+\begin{center}
+  \includegraphics[scale=2.5]{../Image/histegano1.jpg}
+
+\end{center}
+
+Une  autre méthode  plus littéraire est de cacher le message dans du texte. Ainsi le célèbre couple George Sand et Musset s’est illustré lors de leurs conversations écrite.  Voici le texte que George Sand envoya à Musset:\\
+
+
+Cher ami,\\
+
+Je suis toute émue de vous dire que j'ai\\
+bien compris l'autre jour que vous aviez\\
+toujours une envie folle de me faire\\
+danser. Je garde le souvenir de votre\\
+baiser et je voudrais bien que ce soit\\
+une preuve que je puisse être aimée\\
+par vous. Je suis prête à montrer mon\\
+affection toute désintéressée et sans cal-\\
+cul, et si vous voulez me voir ainsi\\
+vous dévoiler, sans artifice, mon âme\\
+toute nue, daignez me faire visite,\\
+nous causerons et en amis franchement\\
+je vous prouverai que je suis la femme\\
+sincère, capable de vous offrir l'affection\\
+la plus profonde, comme la plus étroite\\
+amitié, en un mot : la meilleure épouse\\
+dont vous puissiez rêver. Puisque votre\\
+âme est libre, pensez que l'abandon ou je\\
+vis est bien long, bien dur et souvent bien\\
+insupportable. Mon chagrin est trop\\
+gros. Accourrez bien vite et venez me le\\
+faire oublier. A vous je veux me sou-\\
+mettre entièrement.\\
+
+Votre poupée\\
+
+Très joli n’est-ce pas? Maintenant si vous relisez le texte une ligne sur deux vous comprendrez la vraie nature du message.\\
+
+Ce a quoi Musset répondis:\\
+
+\emph{Quand} je mets à vos pieds un éternel hommage,\\
+\emph{Voulez}-vous qu'un instant je change de visage ?\\
+\emph{Vous} avez capturé les sentiments d'un cœur\\
+\emph{Que} pour vous adorer forma le créateur.\\
+\emph{Je} vous chéris, amour, et ma plume en délire\\
+\emph{Couche} sur le papier ce que je n'ose dire.\\
+\emph{Avec} soin de mes vers lisez les premiers mots,\\
+\emph{Vous} saurez quel remède apporter à mes maux. \\
+
+Si vous lisez les premiers mots de ce poème vous pourrez lire la vraie réponse de Musset.\\
+\subsection{La sténographie informatisé}
+Avec l'avènement de l'informatique, et plus particulièrement avec la multiplication des transferts de fichiers sur les réseaux, la steganographie est redevenu un sujet à la mode. Quoi de plus facile, en effet, que de glisser quelques bits discrets au milieu d'un flot d'images, de textes et de programmes. Les moyens de cacher sont innombrables, des plus rudimentaires aux plus sophistiqués.\\
+
+La première méthode est de cacher le texte dans une page HTML en  effet peut importe le nombre d’espace, le navigateur n’en affichera qu’un. Il suffit, entre les mots, d'insérer autant d'espaces que la lettre qu'on veut cacher (un espace pour A, deux espaces pour B, etc...).\\
+
+Message à cacher : BIBMATHS
+Description en espaces : 2-9-2-13-1-20-8-19\\
+
+Une autre méthode est de cacher le message dans le disque dur sans renseigner l’index. Ainsi en ayant le numéro de l’adresse mémoire, il est possible de retrouver le message.\\
+
+Mais le plus intéressant en matière de steganographie informatique est de cacher le message dans une image. En Bmp, chaque pixel d'une image est représenté par 3 nombres codés sur 8 bits : R représente l'intensité du rouge (un entier entre 0 et 255), G celle du vert, B celle du bleu. Si l'on modifie les 2 bits de droite de R, on modifie très peu sa valeur (au plus, de 3), et cela est imperceptible à l'œil humain. On remplace alors les 2 bits de droite de R par les 2 premiers bits du message. Puis on continue pour les composantes G, R, puis pour le 2ème pixel, etc...\\
+\begin{center}
+  \includegraphics{../Image/cacher_bmp.JPG}
+\end{center}
+
+Ce système est très discret puisque dans une image de 200X200 on peut cacher 200 X 200 X 6 = 240000 bits, soit 30000 caractères. L’inconvenant est que la transformation en JPG perds ainsi le message.\\
+
 
 \newpage
+
 
 \part{Répartition des charges}
 %descriptif précis
