@@ -6,6 +6,7 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{hyperref}
+\usepackage{lscape}
 \hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black}
 
 \title{Cahier des charges du Projet Nigma}
@@ -28,7 +29,7 @@
 
 \subsection{Guillaume LAPÔTRE}
 
-Actuellement étudiant en Info-spé à EPITA, j'entame avec réjouissance ce fabuleux projet à la fois utile et pédagogique. En effet, la cryptographie m'a toujours attiré. Mais je n'avais jamais l'occasion de m'y interresser de plus près. La stéganographie n'était pas mon idée mais je l'ai trouvée assez interressante.
+Actuellement étudiant en Info-spé à EPITA, j'entame avec réjouissance ce fabuleux projet à la fois utile et pédagogique. En effet, la cryptographie m'a toujours attiré. Mais je n'ai jamais eut l'occasion de m'y interressé de plus près. La stéganographie n'était pas mon idée mais je l'ai trouvé assez interressante. Ainsi je pourrais découvrir des principes algorithmiques pour chiffrer et déchiffrer des messages puis les cacher dans une image ! 
 
 \subsection{Justin GANIVET}
 
@@ -199,24 +200,21 @@ Les différentes parties de programmation sont réparties dans le groupe de la m
   Interface Graphique &           & $\oplus$ & $\oplus$ &           \\ \hline
 \end{tabular}
 
-\bigskip
-
-Cette répartition est à titre indicatif ; chacun de nous compte en réalité s'intéresser et participer toutes ces tâches. Ainsi, selon notre avancée dans chaque partie, nous pourrons aider l'autre partie du groupe.
 
 \newpage
 
 \part{Planning de Réalisation}
 %aligné sur les dates de soutenance
-Pour la première soutenance, nous allons démarrer dans la partie cryptographie avec le cryptage RSA. Pour la stéganographie, nous coderons la création d'une image avec des niveaux de gris, le nuage de points sera organisé. Notre logiciel sera pour l'instant en mode console uniquement. Comme type fichier à crypter, nous nous occuperons excusivement d'un fichier texte afin de contrôler le cryptage et le décryptage plus facilement. Nous mettrons aussi en place notre site Web, il permettra de nous présenter ainsi que notre projet. L'intégralité du code source sera disponible au téléchargement.
+Pour la première soutenance, nous allons démarrer dans la partie cryptographie avec le cryptage RSA. Pour la stéganographie, nous implémenterons programme créant, à partir d'un texte, une image en niveaux de gris. Notre programme sera pour l'instant en mode console uniquement. Comme type de fichier à crypter, nous nous occuperons excusivement d'un fichier texte afin de contrôler le cryptage et le décryptage plus facilement. Nous mettrons aussi en place notre site Web, il permettra de nous présenter ainsi que notre projet. L'intégralité du code source sera disponible au téléchargement.
 
-Pour la deuxième soutenance, nous ajouterons le cryptage DES dans la partie cryptographie. L'utilisateur aura donc au choix les algorithmes de cryptage RSA et DES. Du côté de la stéganographie, nous présenterons notre progression de l'intégration d'un fichier dans une image. Nous aurons une interface graphique ou une utilisation en mode console au choix pour l'utilisateur. Nous diversifierons les types de fichier à crypter en ajoutant la possibilité d'utiliser une image.
+Pour la deuxième soutenance, nous ajouterons le cryptage DES dans la partie cryptographie. L'utilisateur aura donc le choix entre les algorithmes de cryptage RSA et DES. Du côté de la stéganographie, nous présenterons notre progression de l'intégration d'un fichier dans une image. Nous aurons une interface graphique ou une utilisation en mode console au choix pour l'utilisateur. Nous diversifierons les types de fichier à crypter en ajoutant la possibilité d'utiliser une image.
 
 Enfin, pour la soutenance finale, nous implémenterons l'algorithme de cryptage AES que nous ajouterons aux algorithmes déjà réalisés. La partie stéganographie sera terminée, nous aurons alors notre fichier crypté qui sera incrusté dans une image. Notre interface aura sans doute évoluée au regard de notre utilisation régulière.
 
 Tout au long du projet, notre site Web sera mis à jour et décrira l'avancée du Projet Nigma.
 
 \bigskip
-
+\begin{landscape}
 
 \begin{tabular}{|l|c|c|c|c|}
   \hline
@@ -227,7 +225,10 @@ Tout au long du projet, notre site Web sera mis à jour et décrira l'avancée d
   &               & du message crypté dans une image  & + mode graphique & + fichier image  \\ \hline
   finale     & + AES         & intégration dans une image        &                  &                  \\ \hline
 \end{tabular}
-
+\begin{center}
+Ci-dessus un tableau récapitulatif de notre planning de réalisation
+\end{center}
+\end{landscape}
 \newpage
 
 \part{Conclusion}
