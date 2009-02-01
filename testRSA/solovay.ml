@@ -33,7 +33,7 @@ let makenba () =
   in
     boucle "";;
 
-makenba();;
+ofstring (makenba());;
 
 let zero = zero_big_int ;;
 let un = unit_big_int ;;
@@ -76,13 +76,37 @@ let rec solovay n = function
     0 -> true
   | k ->
       begin
-	Random.self_init();
-	let a = ofstring (makenba()) in
-	let x = mode a n in
-	  if (eq x zero) or dif (expo a (dive (pred n) (ofint 2)) n) x then
-	    false
-	  else
-	    solovay n (k-1)
+	(*Random.self_init();*)
+	if (eq (mode n (ofint 2)) zero) then
+	  false
+	else
+	  begin
+	    let a = ofstring (makenba()) in
+	    let x = mode a n in
+	      if (eq x zero) or dif (expo a (dive (pred n) (ofint 2)) n) x then
+		false
+	      else
+		solovay n (k-1)
+	  end
       end;;
 
-solovay (ofint 7) 2 ;;
+solovay (ofstring(makenbprem())) 100 ;;
+solovaytest (ofint(1933)) 100 ;;
+
+let rec solovaytest n = function
+    0 -> true
+  | k ->
+      begin
+	if (eq (mode n (ofint 2)) zero) then
+	  false
+	else
+	  begin
+	    Random.self_init();
+	    let a = ofint((Random.int 499)+1) in
+	    let x = mode a n in
+	      if (eq x zero) or dif (expo a (dive (pred n) (ofint 2)) n) x then
+		false
+	      else
+		solovay n (k-1)
+	  end
+      end;;
