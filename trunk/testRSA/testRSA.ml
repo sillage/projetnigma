@@ -1,4 +1,4 @@
-let rec solovay n = 
+let rec solovay n =
   Random.self_init ();
   let a = ref (Random.int (n-2)) in
   let x = (!a+1)/n in
@@ -6,9 +6,9 @@ let rec solovay n =
       false
     else
       true
-	  
+
 let testprem n k =
-  let proba = ref 0. in 
+  let proba = ref 0. in
   let vrai = ref 0. in
   let faux = ref 0. in
     while k > 0 do
@@ -21,6 +21,7 @@ let testprem n k =
     done;
     proba := !vrai /. (!vrai +. !faux);!proba
 
+let poney = testprem 12 2
 let main () =
   print_float(testprem (int_of_string(Sys.argv.(1))) (int_of_string(Sys.argv.(2))))
 
