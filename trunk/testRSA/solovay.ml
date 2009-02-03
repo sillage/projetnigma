@@ -37,6 +37,8 @@ ofstring (makenba());;
 
 let zero = zero_big_int ;;
 let un = unit_big_int ;;
+let plus x y = add_big_int x y ;;
+let moins x y = sub_big_int x y ;;
 let fois x y = mult_big_int x y ;;
 let dive x y = div_big_int x y ;;
 let mode x y = mod_big_int x y ;;
@@ -46,6 +48,8 @@ let dif x y = not (eq_big_int x y) ;;
 let ofstring s = big_int_of_string s;;
 let pow x y = power_big_int_positive_big_int x y ;;
 let pred x = pred_big_int x ;;
+let carre poulpe = square_big_int poulpe;;
+let minus x = minus_big_int x;;
 
 let expo a n p =
   let rec expo2 accu x w = match w with
@@ -72,6 +76,13 @@ tail_expo_modulaire_2 4 13 12;;
 
 (*---------------marche pas encore...----------------------*)
 
+let rec jacobi a n = match a with
+    a when eq a un -> un
+  | a when eq (mode a (ofint(2))) zero -> fois (pow (minus un) (dive (pred (carre n)) (ofint 8))) (jacobi (dive a (ofint 2)) n)
+  | _ -> fois (pow (minus un) (dive (fois (pred a) (pred n)) (ofint 4))) (jacobi (mode n a) a)
+
+let test = jacobi (ofint 7) (ofint 143) ;;
+
 let rec solovay n = function
     0 -> true
   | k ->
@@ -82,8 +93,8 @@ let rec solovay n = function
 	else
 	  begin
 	    let a = ofstring (makenba()) in
-	    let x = mode a n in
-	      if (eq x zero) or dif (expo a (dive (pred n) (ofint 2)) n) x then
+	    let x = jacobi a n in
+	      if dif (expo a (dive (pred n) (ofint 2)) n) x then
 		false
 	      else
 		solovay n (k-1)
@@ -103,8 +114,8 @@ let rec solovaytest n = function
 	  begin
 	    Random.self_init();
 	    let a = ofint((Random.int 499)+1) in
-	    let x = mode a n in
-	      if (eq x zero) or dif (expo a (dive (pred n) (ofint 2)) n) x then
+	    let x = jacobi a n in
+	      if dif (expo a (dive (pred n) (ofint 2)) n) x then
 		false
 	      else
 		solovay n (k-1)
