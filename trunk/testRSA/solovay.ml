@@ -1,9 +1,9 @@
-#load "nums.cma";;
+(*#load "nums.cma";;*)
 
 open Big_int;;
 
 let pprinter b = Format.print_string (string_of_big_int b);;
-#install_printer pprinter;;
+(*#install_printer pprinter;;*)
 
 let randome () = Random.bits();;
 
@@ -33,7 +33,7 @@ let makenba () =
   in
     boucle "";;
 
-ofstring (makenba());;
+
 
 let zero = zero_big_int ;;
 let un = unit_big_int ;;
@@ -50,6 +50,7 @@ let pow x y = power_big_int_positive_big_int x y ;;
 let pred x = pred_big_int x ;;
 let carre poulpe = square_big_int poulpe;;
 let minus x = minus_big_int x;;
+let pgcd x y = gcd_big_int x y;;
 
 let expo a n p =
   let rec expo2 accu x w = match w with
@@ -61,7 +62,7 @@ let expo a n p =
 	  expo2 (mode (fois accu x) p) (mode (fois x x) p) (dive n (ofint 2))
   in expo2 un a n;;
 
-expo (ofstring (makenba())) (ofint 13) (ofint 12);;
+expo (ofint 142698561) (ofint 30000) (ofint 12);;
 
 let tail_expo_modulaire_2 a n p =
   let rec expo accu x w = match w with
@@ -76,12 +77,13 @@ tail_expo_modulaire_2 4 13 12;;
 
 (*---------------marche pas encore...----------------------*)
 
-let rec jacobi a n = match a with
-    a when eq a un -> un
+let rec jacobi a n = match a with(*marche pas pour de grand entier ...*)
+    a when eq a zero -> zero
+  | a when eq a un -> un
   | a when eq (mode a (ofint(2))) zero -> fois (pow (minus un) (dive (pred (carre n)) (ofint 8))) (jacobi (dive a (ofint 2)) n)
   | _ -> fois (pow (minus un) (dive (fois (pred a) (pred n)) (ofint 4))) (jacobi (mode n a) a)
 
-let test = jacobi (ofint 7) (ofint 143) ;;
+let test = jacobi (ofint 800049) (ofint 4325) ;;
 
 let rec solovay n = function
     0 -> true
@@ -102,18 +104,22 @@ let rec solovay n = function
       end;;
 
 solovay (ofstring(makenbprem())) 100 ;;
-solovaytest (ofint(1933)) 100 ;;
+(*solovaytest (ofint(829)) 50 ;;*)
+mode (ofint 8) (ofint 5);;
+pgcd (ofint 17) (ofint 12);;
+ofint((Random.int 499)+1);;
+
 
 let rec solovaytest n = function
     0 -> true
   | k ->
       begin
-	if (eq (mode n (ofint 2)) zero) then
+	let a = ofint((Random.int 499)+1) in
+	if (eq (mode n (ofint 2)) zero) or (dif (pgcd a n) un)then
 	  false
 	else
 	  begin
 	    Random.self_init();
-	    let a = ofint((Random.int 499)+1) in
 	    let x = jacobi a n in
 	      if dif (expo a (dive (pred n) (ofint 2)) n) x then
 		false
@@ -121,3 +127,8 @@ let rec solovaytest n = function
 		solovay n (k-1)
 	  end
       end;;
+
+let main () =
+  print_string (string_of_big_int (jacobi (ofint 86748) (ofint 8969340)))
+    
+let _ = main()
