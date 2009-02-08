@@ -1,0 +1,40 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{lscape}
+
+\title{Projet Nigma : Premiere soutenance}
+\author{Guillaume Lapôtre\\Stéphane Ladevie\\Justin Ganivet\\Sébastien Gislais}
+
+\pagestyle{myheadings}
+	
+\begin{document}
+	\maketitle{}
+	\newpage
+	\tableofcontents
+	\newpage
+	\section{Introduction}
+	\section{Cryptographie}
+		Au niveau de la cryptographie, nous nous sommes tenu  ce que nous avions prévu dans le cahier des charges. Nous avons donc réalisé le cryptage RSA en Ocaml. Ce cryptage nous a posé plus de difficultées que prévu. Au tout début nous pensions que recoder le RSA était une chose difficile dans la mesure où c'est un algorithme de chiffrement encore utilisé aujourd'hui donc encore efficace (bien que inventé en 1977). Le RSA repose entièrement sur la difficulté de factoriser un très grand nombre.
+		
+		En effet le RSA est un procédé cryptographique asymétrique (ou bien à clé publique), ce qui veut dire qu'au lieu de générer une clé qui permet de chiffrer ainsi que de déchiffrer un message, le RSA génère une clé dite "publique" ainsi qu'une clé dite "privée". Ces deux clés sont intimement liées. Cela veut dire que le RSA génère obligatoirement un couple comportant une clé publique ainsi qu'une clé privée en même temps. La fabrication de la clé privée dépend de la clé publique. 
+		
+		La clé publique est, comme son nom l'indique publique\dots C'est à dire que l'on peut la partager avec autant de personne que l'on désire. Cette clé permet de chiffrer un message. Par contre une fois le document chiffré, le document n'est déchiffrable que par le détenteur de la clé privée. Ainsi la personne qui a chiffré le message ne peut vérifier si le chiffrement c'est bien déroulé. Cette clé est un couple de deux nombre $(n,e)$. $n$ représente le produit de deux grands nombres premiers\footnote{Appelons-les p et q} (de l'ordre de plusieurs centaines de chiffres!). Et $e$ est un nombre premier avec le produit $(p - 1)(q - 1)$. Pour crypter un texte à l'aide de la clé il faut représenter notre message sous la forme d'un ou de plusieurs entier\footnote{Que nous appellerons $M_{i}$} compris entre $1$ et $n-1$. Le message chiffré est représenté sous la forme des $C_{i} = M_{i}^e \textrm{ mod } n$
+		
+		La clé privée est la clé permettant de déchiffrer un message chiffré à l'aide de sa clé publique associée. Elle est donc gardée par son propriétaire. Elle est composée elle aussi d'un couple de nombre $(n,d)$. $n$ est identique au $n$ de la clé publique. Et $d$ est tel que $ed \equiv 1 \textrm{ mod } (p - 1)(q - 1)$. Pour déchiffrer un message la procédure est pratiquement identique au chiffrement : On calcule les $D_{i}$ tel que : $D_{i} = C_{i}^d \textrm{ mod } n$
+		
+		On remarque que le $e$ et le $d$ sont fabriqué à partir des nombres premiers $p$ et $q$. Si l'on pouvait facilement et rapidement factorisé notre $n$ afin de trouver $p$ et $q$ alors le RSA ne servirait plus à rien. Or ce n'est pas le cas\dots 
+		\subsection{Partie faite par Guillaume Lap\^{o}tre}
+		\subsection{Partie faite par Sébastien Gislais}
+	\section{Stéganographie}
+		\subsection{Partie faite par Justin Ganivet}
+		\subsection{Partie faite par Stéphane Ladevie}
+	\section{Site web}
+	\section{Conclusion}
+	\section*{Annexe}
+		\subsection {Screenshot Steganographie}
+		\subsection {Screenshot Cryptographie}
+\end{document}
