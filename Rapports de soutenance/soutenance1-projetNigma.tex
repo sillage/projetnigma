@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{lscape}
+\usepackage{amsmath}
 
 \title{Projet Nigma : Premiere soutenance}
 \author{Guillaume Lapôtre\\Stéphane Ladevie\\Justin Ganivet\\Sébastien Gislais}
@@ -26,15 +27,65 @@
 		
 		La clé privée est la clé permettant de déchiffrer un message chiffré à l'aide de sa clé publique associée. Elle est donc gardée par son propriétaire. Elle est composée elle aussi d'un couple de nombre $(n,d)$. $n$ est identique au $n$ de la clé publique. Et $d$ est tel que $ed \equiv 1 \textrm{ mod } (p - 1)(q - 1)$. Pour déchiffrer un message la procédure est pratiquement identique au chiffrement : On calcule les $D_{i}$ tel que : $D_{i} = C_{i}^d \textrm{ mod } n$
 		
-		On remarque que le $e$ et le $d$ sont fabriqué à partir des nombres premiers $p$ et $q$. Si l'on pouvait facilement et rapidement factorisé notre $n$ afin de trouver $p$ et $q$ alors le RSA ne servirait plus à rien. Or ce n'est pas le cas\dots 
+		On remarque que le $e$ et le $d$ sont fabriqué à partir des nombres premiers $p$ et $q$. Si l'on pouvait facilement et rapidement factorisé notre $n$ afin de trouver $p$ et $q$ alors le RSA ne servirait plus à rien. C'est précisément parcequ'ils sont premier qu'il est difficile de factoriser $n$.  
+		
 		\subsection{Partie faite par Guillaume Lap\^{o}tre}
+			J'ai tout d'abord commencer par essayer de créer mes grands nombres premiers puisqu'ils sont le fondement de la 
+		cryptographie RSA. J'ai rencontré quelque problème au début car je n'avais pas prévu que les entier était représentés sur 
+		31 bits en Ocaml. Ainsi lorsque je voulais créer un grand nombre Ocaml plantait.
+		
+		J'ai donc fait des recherches afin de 
+		trouver comment gérer des grands nombres en Ocaml. J'ai trouvé deux modules satisfaisant à savoir Numerix et Big\_int. Numerix
+		n'est pas une bibliothèque native de OCaml mais je l'ai trouvé intéressante car elle comportait déja une fonction pouvant  		
+		determiner si un nombre est premier ou non. L'inconvenient non-négligeable est que ces tests de primalité sont efficaces pour 
+		un $n < 2^{50}$ or nous voulons des entiers premiers d'au moins un millier de bits. Du coup c'est bibliothèque ne nous était 
+		plus utile et nous nous sommes rabattu sur la deuxième : Big\_int. Cette dernière à l'avantage d'être une bibliothèque native 
+		de Ocaml, ce qui nous permet de l'utiliser sans problème sans avoir à l'installer au préalable.
+		
+		Big\_int est donc une bibliothèque multi-précision gérant de grands entiers. On peut faire tout ce que l'on faisait déja avec 
+		des entiers mais le nom des fonctions est différent. Le "léger" inconvénient est que les opérateur fonctionne en préfixe. Ce 
+		qui implique que pour toute les opérations que nous écrivons manipulant des Big\_int sont en notation polonaise. 
+		
+		Une fois compris comment marchent la plupart des fonctions de Big\_int je me suis intéressé une fois de plus à la création de 
+		mes grand nombres premiers.	Pour tester si un $n$ est premier l'algorithme le plus naïf est de tester si aucun $1 < p < 
+		\sqrt{n} $ ne divise $n$. Cette algorithme, comme celui  du crible d'Ératosthène, est beaucoup trop long pour trouver si un 
+		nombre de plusieurs centaine de chiffres est premier. Il existe donc plusieurs algorithme plus évolué qui sont tous basés 
+		plus ou moins sur le petit théorème de Fermat (Si $p$ est un nombre premier et $a \in N $ alors $a^{p - 1} \equiv 
+		 1 \textrm{ mod } p$). Ce sont des algorithmes probabilistes, autrement dit lorsque l'on donne un nombre à ce type 
+		 d'algorithme, il répond soit "ce nombre est probablement premier" soit "ce nombre est composé". Donc lorsque l'algorithme 
+		 renvoie vrai on a pas la certitude que ce nombre est réellement premier. Heureusement ils répondent avec un certain degré de 
+		 probabilité. Il existe 3 ou 4 algorithmes probabilistes pouvant être utilisé pour le RSA. Parmis eux il y a Solovay-Strassen, 
+		 Lehmann, Miller-Rabin.
+		 
+		 Cepandant j'ai eut beaucoup de difficultées à coder ces algorithmes en Ocaml. J'ai donc laisser cette partie à l'autre membre 
+		 du groupe traitant la cryptographie : Sébastion Gislais. Il expliquera mieux que moi ses péripéties avec les nombres 	
+		 premiers.
+		 
+		 Je suis donc passé à la suite du projet pour le RSA. Donc à la création de mes nombres $e$ et $d$. La fonction générant $e$
+		 n'a pas posé trop de souci du fait de sa définition relativement simple. Le nombre $d$ a été un peu plus fastidieux à
+		 générer du fait lui aussi de sa définition. Cepandant après quelque visites sur des sites internets expliquant l'algorithme
+		 d'Euclide étendu ainsi que sur un livre de la bibliothèque d'EPITA nommé \textit{Cryptographie appliquée} je réussis à 
+		 générer mon $d$. Ayant désormais tout les éléments constituant mes clefs privée et publique, je voulais les écrire dans
+		 un fichier. Ainsi j'aurais mon fichier avec la clé privé que je conserve jalousement et mon fichier avec la clé publique
+		 que je partage avec toute les personnes voulant m'envoyer un message chiffré. J'ai été agréblement surpris par la facilité de
+		 la gestion des fichiers par Ocaml. J'ai ainsi créé mes clefs sans problème. 
+		 
+		 Une fois mes clés générées, il me fallait maintenant faire le principal : chiffrer et déchiffrer un message. Nous voulions 
+		 crypter avant tout du texte, mes clés étant numérique il fallait donc que je transforme mon texte en une suite de nombres.
+		 J'ai donc travaillé sur le code ascii de mes caractères. Ainsi ma fonction de cryptage a besoin de la clé publique ainsi que
+		 d'un fichier à crypter. Elle récupère chaque code ascii de chaque caractère du fichier, crypte ces caractères et met le
+		 résultat crypté dans un nouveau fichier. Ce fichier chiffré et donc constitué d'une liste de code ascii chiffré en RSA.
+		 Enfin, pour déchiffrer ce fichier, je déchiffre chaque caractère ascii à l'aide de la clé privée et j'écris le caractère
+		 correspondant dans un nouveau fichier. Ainsi je peux vérifier que le fichier d'origine et le fichier chiffré puis déchiffré
+		 sont identique.    
+		 
 		\subsection{Partie faite par Sébastien Gislais}
 	\section{Stéganographie}
 		\subsection{Partie faite par Justin Ganivet}
 		\subsection{Partie faite par Stéphane Ladevie}
 	\section{Site web}
 	\section{Conclusion}
-	\section*{Annexe}
+	\section{Annexe}
 		\subsection {Screenshot Steganographie}
 		\subsection {Screenshot Cryptographie}
 \end{document}
