@@ -134,7 +134,7 @@ Au préalable, il faut choisir un nombre aléatoire $p$ à tester et calculer $b
 \item Si $j = b$ et $z \ne p - 1$, alors $p$ n'est pas premier.
 \end{enumerate}
 
-Il fallut là encore user d'imagination et innover pour implanter cet algorithme de Miller-Rabin. Le chemin fut hardu encore à cause de l'inférence de type qui ne nous laisse pas tout faire. Les réflexes acquis par l'écriture du précédant algorithme de Solovay-Strassen ont aidé sans nul doute à ma réussite de l'homme sur la machine. J'eu raison de Caml qui est désormais soumis à notre volonté. Les nombres premiers à plusieurs \emph{centaines} de chiffres n'ont plus de secrets pour moi et peuvent être découverts très rapidement.
+Il fallut là encore imaginer, concevoir et innover pour implanter cet algorithme de Miller-Rabin. Le chemin fut hardu, encore à cause de l'inférence de type qui ne nous laisse pas tout faire. Nous avons dû utiliser et traduire en Caml des implantations de l'algorithme de Miller-Rabin depuis des scripts Python, du C, du C++ et autres langages de programmation. Les réflexes acquis par l'écriture du précédant algorithme de Solovay-Strassen ont aidé sans nul doute à ma réussite de l'homme sur la machine. J'eu raison de Caml qui est désormais soumis à notre volonté. Les nombres premiers à plusieurs \emph{centaines} de chiffres n'ont plus de secrets pour moi et peuvent être découverts très rapidement.
 
 Les tests sont vraiment satisfaisants et concluants sur l'efficacité de mon implantation de l'algorithme : il faut moins de 4 minutes pour un processeur à double c\oe{}ur pour générer deux nombres premiers de 512 chiffres qui sont ensuite multipliés entre eux pour former un nombre de plus de 1024 chiffres ! Je rappelle qu'un nombre de 1024 chiffres est représenté en binaire par 3400 bits.
 
@@ -143,8 +143,37 @@ De nos jours, il est conseillé d'utiliser des clés de plus de 1024 bits pour l
 \newpage
 
 \section{Stéganographie}
+\subsection{Partie Explication Stéganographie}
+
+La stéganographie est l'art de cacher un message secret. Dans le projet Nigma, nous cachons ce message dans une image. Les images que nous utilisons pour le moment sont au format BMP. Le format BMP est constitué d'un header qui sert d'en-tête au fichier. Ce header fait 54 octets. Il est très important car il permet de connaitre les propriétés du fichier et de l'image comme le nombre de bits par pixel ou la taille de l'image. Il ne faut surtout pas toucher à ce header sinon l'image de base sera modifiée voire même illisible pour les logiciels de visualisation. Ainsi quand nous lisons l'image, nous sautons ces 54 octets qu'il ne faut pas toucher et nous les écrivons tels quels dans la future image.
+
+Pour l'instant, ne nous pouvons cacher que du texte et pas un fichier en entier. Ce texte est une chaine de caractères que nous découpons caractère par caractère. Prenons l'exemple de l'astérisque : '*' sa valeur en ASCII est 42. En binaire cela fait donc \%101010. Un caractère fait 8 bits donc il faut rajouter un 0 à gauche. Cela nous donne \%0101010. Enfin nous rajoutons un 0 pour qu’un caractère soit codé sur 9 bits. Ainsi chaque caractère sera contenu dans 3 pixels puisque nous pouvons cacher 1 caractère dans un pixel.
+
+Cette transformation faite, nous mettons cette chaine de bits sous la forme de chaîne de caractères. Ainsi '*' sera représenté sous la string "00101010". Nous répétons l'opération pour chaque caractère de la chaine et nous concaté\-nons le tout.
+
+Que faire avec cette chaine de caractères exclusivement constitués de '0' et de '1' Et bien nous allons tout d'abord prendre caractère par caractère les donnée de l'image de base. Ensuite nous allons tester la parité. Si le caractère est pair et que l'on veut cacher le caractère '1' dans l'image, on incrémente le caractère avant de le mettre dans la nouvelle image.
+
+Un caractère va jusqu’à 255 en non signé. Si par hasard le caractère de l'image de base fait 255 et qu'on lui rajoute 1, on va dépasser la taille. Pour cela on teste si le caractère est à 255, si oui, on teste si l'on doit incrémenter et enfin si oui on enlève -1. Ainsi on n’a pas dépassé la taille et on garde la parité finale.
+
+Une fois la chaine de bits finie, on rajoute une marque de fin de niveau. Cette marque sert pour le décodage du message. Nous avons donc décidé de mettre cette marque de fin de message à 255 255 255. Pour éviter d'interrompre le message trop tôt en mettant une marque de fin de message involontaire, on interdit la valeur 255. Si la valeur est à 254 et que l'on doit incrémenter ce caractère, on le décrémente de 1.
+
+\begin{center}
+  \includegraphics[scale=0.30]{pixel.jpg}
+\end{center}
 
 \subsection{Partie de Justin Ganivet}
+
+Pour ce projet je me suis occupé de la partie stéganographie avec Stéphane comme partenaire. Nous nous sommes répartis les tâches et c'est ainsi que je me suis occupé de cacher du texte dans l'image tandis que Stéphane devait retrouver le message.
+
+Ma première tâche fût donc d'apprendre le C et plus particulièrement la manipulation de fichiers. J'ai donc commencé par copier une image caractère par caractère en ajoutant 100 modulo 128. Ainsi tous les pixels de l'image avaient changé. Je pouvais donc créer une image.
+
+Ensuite il a fallu créer un algorithme pour changer chaque pixel en fonction d'une chaine de caractères composée de 1 et de 0. A grand coup de If j'ai donc testé la parité de la chaine de bits et celle du caractère et changé en fonction W00T. J'ai rajouté un marqueur de fin de phrase qui est un pixel à 255 255 255. Cela permettait donc à Stéphane de pouvoir travailler sur sa partie de décodage. 
+
+Pouvoir cacher une chaîne de bit c'est bien, mais cacher une chaîne de caractères c'est mieux. Je me suis donc mis à la tâche. Il fallait créer une fonction qui générait une chaîne de bits à partir d'un caractère et une autre fonction qui faisait l'inverse. Le principe de ces fonctions est simple mais le code à générer n'est pas si simple que ça. Car il faut bien faire attention aux tours de boucle en trop et aux \texttt{seg fault}. Heureusement, le C est faiblement typé ce qui facilitait la tâche.
+
+Une fois la partie de Stéphane finie, j'ai réorganisé le dossier afin de ne pas mettre les images dans le même dossier que le code source. Etant le seul à avoir suivi la conférence, j'ai donc crée les Makefiles pour notre projet.
+
+Nous avons donc un Makefile pour le dossier Caml, un autre pour le dossier C et un général qui se trouve dans la racine. J'ai créé les règles de base pour le C et le Caml tout en gérant les dépendances. Ensuite, pour le Makefile de la racine, j'ai dû apprendre à gérer la récursivité. Ainsi, dans le Makefile de la racine, j'appelle la fonction make avec l'option \texttt{-C} pour donner le chemin de l'autre Makefile.
 
 \newpage
 
@@ -316,13 +345,13 @@ Haut les c\oe{}urs ! Ce rapport de soutenance est bientôt achevé, nous voici a
 
 Pour ce qui est de la stéganographie, actuellement le programme prend en paramètre une chaîne de caractère pour la cacher au sein d'une image, c'est pratique pour faire passer des messages comme \og à quelle heure a lieu la soutenance ? \fg{} qui ne sont pas cryptés au préalable. Mais une fois le message crypté on obtient une suite de chiffres passablement indigeste qui est difficile à recopier c'est pourquoi à l'avenir le programme prendra en paramètre un fichier dans lequel est stocké le produit du cryptage. Ainsi l'utilisateur ne perdra pas la vue en essayant de recopier le message crypté sans faire de fautes (qui seraient fatal à la conservation du sens du message). Un des autres objectifs futurs de la section stéganographie est l'implémentation de nouvelles techniques de camouflage : à l'instant ou vous lisez ces lignes le programme de stéganographie utilise une unique technique qui consiste à cacher un caractère dans 3 pixels en faisant varier de 1 au maximum les champs de couleur RGB des pixels. Cette technique est très discrète puisque le changement est imperceptible à l'\oe{}il nu (mis à part peut-être pour Jim Ellison) mais elle est limitée au niveau de la capacité de stockage : un caractère étant codé sur 9 bits, on ne peut en cacher que 160\,000 (espaces compris) dans une image de format bitmap $800 \times 600$, à première vue cela semble énorme mais une fois un message crypté (en RSA par exemple) celui-ci voit son nombre de caractère augmenter de façon tout à fait impressionnante. Le but est donc de trouver d'autres techniques possédant un bon ratio discrétion/capacité afin de proposer à l'utilisateur une gamme de méthodes qui conviendront à différents usages (une personne voulant juste cacher une phrase n'utilisera pas la même technique de stéganographie que la personne voulant faire circuler un roman de manière illicite).
 
+\bigskip
+
+Du coté de la cryptographie, il nous reste pas mal de choses à faire. Nous avons prévu de faire du cryptage DES pour la deuxième soutenance. Le DES, contrairement au RSA, est un cryptage symétrique. Il n'y a donc qu'une seule clé permettant de chiffrer et de déchiffrer un document. Il possède un grand avantage par rapport au RSA : il est mille fois plus rapide ! Par contre le problème avec le DES c'est qu'il faut pouvoir envoyer cette clé au destinataire afin qu'il puisse chiffrer ses documents. Ce qui pose un problème : comment transmettre cette clé sans qu'il y ait de risque qu'elle soit récupérée par une personne mal intentionnée ? Ainsi, une des solutions envisageables est de chiffrer tout simplement cette clé avec par exemple\ldots{} le RSA ! C'est exactement comme cela que fonctionne les systèmes d'identification, les envois de code de carte de crédit, etc. Nous n'avons donc plus de problème au niveau de l'échange des clefs. Nous pourrons donc chiffrer notre document puis le cacher dans une image à l'aide de notre partie stéganographie ! Ainsi le message sera introuvable !
+
 \newpage
 
 \section{Annexe}
-
-\subsection {Screenshot Steganographie}
-
-\newpage
 
 \begin{landscape}
   \subsection {Screenshot Cryptographie}
