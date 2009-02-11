@@ -57,13 +57,13 @@ Au niveau de la cryptographie, nous nous sommes tenu  ce que nous avions prévu 
 
 En effet le RSA est un procédé cryptographique asymétrique (ou bien à clé publique), ce qui veut dire qu'au lieu de générer une clé qui permet de chiffrer ainsi que de déchiffrer un message, le RSA génère une clé dite \og publique \fg{} ainsi qu'une clé dite \og privée \fg{}. Ces deux clés sont intimement liées. Cela veut dire que le RSA génère obligatoirement un couple comportant une clé publique ainsi qu'une clé privée en même temps. La fabrication de la clé privée dépend de la clé publique.
 
-La clé publique est, comme son nom l'indique publique\dots{} C'est à dire que l'on peut la partager avec autant de personne que l'on désire. Cette clé permet de chiffrer un message. Par contre une fois le document chiffré, le document n'est déchiffrable que par le détenteur de la clé privée. Ainsi la personne qui a chiffré le message ne peut vérifier si le chiffrement c'est bien déroulé. Cette clé est un couple de deux nombres $(n, e)$ avec $n$ représentant le produit de deux grands nombres premiers, appelés $p$ et $q$, de l'ordre de plusieurs centaines de chiffres ! Et $e$ est un nombre premier avec le produit $(p - 1)(q - 1)$. Pour chiffrer un texte à l'aide de la clé il faut représenter notre message sous la forme d'un ou de plusieurs entiers $M_{i}$ compris entre $1$ et $n - 1$. Le message chiffré est représenté sous la forme des $C_{i} = M_{i}^e \textrm{ mod } n$.
+La clé publique est, comme son nom l'indique publique\dots{} C'est à dire que l'on peut la partager avec autant de personne que l'on désire. Cette clé permet de chiffrer un message. Par contre une fois le document chiffré, le document n'est déchiffrable que par le détenteur de la clé privée. Ainsi la personne qui a chiffré le message ne peut vérifier si le chiffrement c'est bien déroulé. Cette clé est un couple de deux nombres $(n, e)$ avec $n$ représentant le produit de deux grands nombres premiers, appelés $p$ et $q$, de l'ordre de plusieurs centaines de chiffres ! Et $e$ est un nombre premier avec le produit $(p - 1)(q - 1)$. Pour chiffrer un texte à l'aide de la clé il faut représenter notre message sous la forme d'un ou de plusieurs entiers $M_{i}$ compris entre $1$ et $n - 1$. Le message chiffré est représenté sous la forme des $C_{i} = M_{i}^e \mod n$.
 
-La clé privée est la clé permettant de déchiffrer un message chiffré à l'aide de sa clé publique associée. Elle est donc gardée par son propriétaire. Elle est composée elle aussi d'un couple de nombre $(n, d)$. $n$ est identique au $n$ de la clé publique. Et $d$ est tel que $ed \equiv 1 \textrm{ mod } (p - 1)(q - 1)$. Pour déchiffrer un message la procédure est pratiquement identique au chiffrement : On calcule les $D_{i}$ tel que : $D_{i} = C_{i}^d \textrm{ mod } n$.
+La clé privée est la clé permettant de déchiffrer un message chiffré à l'aide de sa clé publique associée. Elle est donc gardée par son propriétaire. Elle est composée elle aussi d'un couple de nombre $(n, d)$. $n$ est identique au $n$ de la clé publique. Et $d$ est tel que $ed \equiv 1 \textrm{ mod } (p - 1)(q - 1)$. Pour déchiffrer un message la procédure est pratiquement identique au chiffrement : On calcule les $D_{i}$ tel que : $D_{i} = C_{i}^d \mod n$.
 
 On remarque que le $e$ et le $d$ sont fabriqué à partir des nombres premiers $p$ et $q$. Si l'on pouvait facilement et rapidement factorisé notre $n$ afin de trouver $p$ et $q$ alors le RSA ne servirait plus à rien. C'est précisément parce qu'ils sont premiers et très grands qu'il est difficile de factoriser $n$.
 
-\subsection{Partie de Guillaume Lap\^{o}tre}
+\subsection{Partie de Guillaume Lapôtre}
 
 J'ai tout d'abord commencé par essayer de créer mes grands nombres premiers puisqu'ils sont le fondement de la cryptographie RSA. J'ai rencontré quelques problèmes au début car je n'avais pas prévu que les entiers étaient représentés sur 31 bits en Ocaml. Ainsi lorsque je voulais créer un grand nombre, Ocaml plantait.
 
@@ -71,7 +71,7 @@ J'ai donc fait des recherches afin de trouver comment gérer des grands nombres 
 
 \texttt{Big\_int} est donc une bibliothèque multi-précision gérant de grands entiers. On peut faire tout ce que l'on faisait déjà avec des entiers mais le nom des fonctions est différent. Le \emph{léger} inconvénient est que les opérateurs fonctionnent en préfixe. Cela implique que toutes les opérations que nous écrivons manipulant des \texttt{Big\_int} sont en notation polonaise.
 
-Une fois compris comment s'appliquent la plupart des fonctions de la bibliothèque \texttt{Big\_int} je me suis intéressé une fois de plus à la création de mes grand nombres premiers. Pour tester si un $n$ est premier, l'algorithme le plus naïf est de tester si aucun $1 < p < \sqrt{n}$ ne divise $n$ nommé algorithme d'Euclide. Cet algorithme, comme celui  du crible d'Ératosthène, est beaucoup trop long pour trouver si un nombre de plusieurs centaines de chiffres est premier. Il existe donc plusieurs algorithmes plus évolués qui sont tous basés plus ou moins sur le petit théorème de Fermat : Si $p$ est un nombre premier et $a \in N $ alors $a^{p - 1} \equiv 1 \textrm{ mod } p$. Ce sont des algorithmes probabilistes, autrement dit lorsque l'on donne un nombre à ce type d'algorithme, il répond soit \og ce nombre est \emph{probablement} premier \fg{} soit \og ce nombre est composé \fg{}. Donc lorsque l'algorithme renvoie vrai on n'a pas la certitude que ce nombre est réellement premier. Heureusement ils répondent avec un certain degré de probabilité. Il existe 3 ou 4 algorithmes probabilistes pouvant être utilisé pour le RSA. Parmi eux il y a Solovay-Strassen, Lehmann, Miller-Rabin.
+Une fois compris comment s'appliquent la plupart des fonctions de la bibliothèque \texttt{Big\_int} je me suis intéressé une fois de plus à la création de mes grand nombres premiers. Pour tester si un $n$ est premier, l'algorithme le plus naïf est de tester si aucun $1 < p < \sqrt{n}$ ne divise $n$ nommé algorithme d'Euclide. Cet algorithme, comme celui  du crible d'Ératosthène, est beaucoup trop long pour trouver si un nombre de plusieurs centaines de chiffres est premier. Il existe donc plusieurs algorithmes plus évolués qui sont tous basés plus ou moins sur le petit théorème de Fermat : Si $p$ est un nombre premier et $a \in N $ alors $a^{p - 1} \equiv 1 \mod p$. Ce sont des algorithmes probabilistes, autrement dit lorsque l'on donne un nombre à ce type d'algorithme, il répond soit \og ce nombre est \emph{probablement} premier \fg{} soit \og ce nombre est composé \fg{}. Donc lorsque l'algorithme renvoie vrai on n'a pas la certitude que ce nombre est réellement premier. Heureusement ils répondent avec un certain degré de probabilité. Il existe 3 ou 4 algorithmes probabilistes pouvant être utilisé pour le RSA. Parmi eux il y a Solovay-Strassen, Lehmann, Miller-Rabin.
 
 Cependant j'ai eut beaucoup de difficultées à coder ces algorithmes en OCaml. J'ai donc laissé cette partie à l'autre membre du groupe traitant la cryptographie : Sébastien Gislais. Il expliquera mieux que moi ses péripéties avec les nombres premiers.
 
@@ -86,7 +86,59 @@ Une fois mes clés générées, il me fallait maintenant faire le principal : ch
 
 J'ai démarré le projet en venant en aide à Guillaume. Il était très déconte\-nancé de ne pas pouvoir manipuler de grands entiers avec Caml. Nous avons testé la bibliothèque Numérix mais comme dit plus haut, les entiers gérés n'étaient pas si grands que ça. La bibliothèque par défaut de Caml nous a finalement paru bien utile : \texttt{Big\_int}. Ça présision arbitraire sur les entiers nous a en premier lieu permis de nous lancer dans la programmation de l'algorithme RSA.
 
-La première étape de cet algorithme est de générer les nombres premiers $p$ et $q$ avec plusieurs centaines de chiffres pour rendre le chiffrage extrêmement difficile à casser. L'algorithme d'Euclide pour trouver des nombres premiers de cette taille est tout naturellement exclu. Nous avons trouvé, avec l'aide de notre professeur de mathématiques \textsc{M. Rodot}, les tests de primalités de Solovay-Strassen, de Lehman et de Miller-Rabin.
+La première étape de cet algorithme est de générer les nombres premiers $p$ et $q$ avec plusieurs centaines de chiffres pour rendre le chiffrage extrêmement difficile à casser. L'algorithme d'Euclide pour trouver des nombres premiers de cette taille est tout naturellement exclu. Nous avons trouvé, avec l'aide de notre professeur de mathématiques \textsc{M. Rodot}, les tests de primalités de Solovay-Strassen, de Lehmann et de Miller-Rabin dans le livre \textit{Cryptographie appliquée}. Nous allons présenter ces différents algorithmes probabilistes de test de primalité.
+
+Le test de Solovay-Strassen utilise le symbole de \textsc{Jacobi} pour tester si $p$ est premier. Il est ainsi formulé :
+\begin{enumerate}
+\item Choississez un nombre aléatoire $a$ inférieur à $p$.
+\item Si le $pgcd(a,p) \ne 1$, alors $p$ échoue au test et il est composé.
+\item Calculer $j = a^{(p - 1) / 2} \mod p$.
+\item Calculer le symbole de \textsc{Jacobi} $J(a,p)$.
+\item Si $j \ne J(a,p)$, alors $p$ n'est certainement pas premier.
+\item Si $j = J(a,p)$, alors la probabilité que $p$ ne soit pas premier est au plus de 50\,\%.
+\end{enumerate}
+
+Si on répète le test $k$ fois avec $k$ valeurs différentes aléatoires, un nombre composé a \emph{une} chance sur $2^k$ de passer les $k$ tests, soit une probabilité de $2^{-k}$ d'être certain que $p$ est un nombre premier. Avec 100 tests, nous sommes assez sûrs\dots{}
+
+L'algorithme semble très alléchant, cependant, c'est lors de l'implantation du symbole de \textsc{Jacobi} que nous avons eu de petits problèmes.
+
+Définition du symbole de \textsc{Jacobi} $J(a,n)$ pour $n$ impair :
+
+\begin{displaymath}
+J(a,n) =
+\left\{
+  \begin{array}{cc}
+    1 & a = 1 \\
+    J\left(\frac{a}{2}, n\right)(- 1)^{\frac{n^2 - 1}{8}} & a \textrm{ pair} \\
+    J(n \mod a, a)(- 1)^{\frac{(a - 1) (n - 1)}{4}} & a \textrm{ impair}
+  \end{array}
+\right.
+\end{displaymath}
+
+L'implantation en Caml est on ne peut plus triviale par sa définition même, mais notre fonction récursive arrive à nous renvoyer des exceptions Caml \texttt{Out\_of\_memory} à la fin des retours d'appels, cela malgré l'utilisation des \texttt{Big\_int} et que le symbole de \textsc{Jacobi} ne renvoie que les valeurs $\{- 1, 0, 1\}$. Une exponentiation modulaire dans la puissance $(- 1)$ nous tira d'affaire après maintes recherches et tests. Heureusement que nous avons eu un séminaire Caml l'année dernière !
+
+Nous ne sommes pas arrivés au bout de nos peines car l'implantation de l'algorithme de Solovay-Strassen nous a été impossible du fait de l'inférence de type. En effet, le typage fort de Caml ne nous a pas permis de renvoyer un résultat après nos boucles et nos tests de conditions de sortie.
+
+\bigskip
+
+Non découragés pour autant par ces deux retards, et forts de notre expé\-rience en algorithmique et en Caml, nous nous sommes littéralement attaqués à l'algorithme de Miller-Rabin que \og tout le monde utilise \fg{} d'après notre livre et Internet. Bref, tout le monde était au courant sauf nous\dots{} Il se présente sous cette forme :
+
+Au préalable, il faut choisir un nombre aléatoire $p$ à tester et calculer $b$ tel que $b$ est le nombre de fois que 2 divise $p - 1$ (c'est-à-dire que $2^b$ est la plus grande puissance de 2 qui divise $p - 1$. Ensuite nous devons calculer $m$ tel que $p = 1 + 2^{b}m$.
+
+\begin{enumerate}
+\item Choisissez un nombre aléatoire $a$ inférieur à $p$.
+\item Posez $j = 0$ et $z = a^{m} \mod p$.
+\item Si $z = 1$ ou $z = p - 1$, alors $p$ passe le test et peut être premier.
+\item Si $j > 0$ et $z = 1$, alors $p$ n'est pas premier.
+\item Posez $j = j + 1$. Si $j < b$ et $z \ne p - 1$, posez $z = z^{2} \mod p$ et retournez à l'étape précédente. Si $z = p - 1$, alors $p$ passe le test et peut être premier.
+\item Si $j = b$ et $z \ne p - 1$, alors $p$ n'est pas premier.
+\end{enumerate}
+
+Il fallut là encore user d'imagination et innover pour implanter cet algorithme de Miller-Rabin. Le chemin fut hardu encore à cause de l'inférence de type qui ne nous laisse pas tout faire. Les réflexes acquis par l'écriture du précédant algorithme de Solovay-Strassen ont aidé sans nul doute à ma réussite de l'homme sur la machine. J'eu raison de Caml qui est désormais soumis à notre volonté. Les nombres premiers à plusieurs \emph{centaines} de chiffres n'ont plus de secrets pour moi et peuvent être découverts très rapidement.
+
+Les tests sont vraiment satisfaisants et concluants sur l'efficacité de mon implantation de l'algorithme : il faut moins de 4 minutes pour un processeur à double c\oe{}ur pour générer deux nombres premiers de 512 chiffres qui sont ensuite multipliés entre eux pour former un nombre de plus de 1024 chiffres ! Je rappelle qu'un nombre de 1024 chiffres est représenté en binaire par 3400 bits.
+
+De nos jours, il est conseillé d'utiliser des clés de plus de 1024 bits pour le chiffrement RSA. En 2005, le plus grand nombre factorisé, selon l'état de l'art en matière de calculs distribués, était long de 663 bits. Seul un \emph{ordinateur quantique} peut factoriser un de nos nombres généré dans un temps humainement raisonnable ! Nous nous satifaisons de cette véritable performance.
 
 \newpage
 
@@ -240,11 +292,29 @@ Finalement une fois le principe de notre module de stéganographie établit avec
 
 \newpage
 
-\section{Site web}
+\section{Site Web}
+
+Le site Web a été réalisé par Sébastien Gislais. Il a été codé en xHTML avec des CSS (feuilles de style) ainsi qu'en PHP. Notre site Web peut se mettre facilement à jour. Il est léger et possède une présentation très claire de notre projet. Il respecte bien entendu les normes et les recommandations du W3C pour une parfaite accessibilité.
+
+\bigskip
+
+Il est en ligne à cette adresse : \href{http://projetnigma.free.fr/}{http://projetnigma.free.fr/}
+
+\bigskip
+
+Nous avons une page de présentation de notre Team pour expliquer notre démarche et partager notre vécu à travers ce projet d'envergure. Dans le but de fournir une sorte de support aux visiteurs qui s'intéressent eux aussi à la cryptographie et à la stéganographie, nous avons mis en place une page de liens vers les sites indispensables que nous avons parcourus et appris par c\oe{}ur\dots{}
+
+Les sources du projet sont disponibles et permettent d'autant plus de partager notre expérience avec le monde entier. Il est possible d'entrer en contact avec nous pour de plus amples informations ou conseils \emph{via} une messagerie électronique que nous laissons à disposition.
+
+Le site Web est complet, continuera d'être mis à jour régulièrement et informera de l'avancée du projet durant l'année.
 
 \newpage
 
 \section{Conclusion}
+
+Haut les c\oe{}urs ! Ce rapport de soutenance est bientôt achevé, nous voici arrivé à la conclusion ! Nous avons donc obtenu au cours de nos longues heures de travail assidues un programme tout à fait fonctionnel et prêt à l'utilisation, néanmoins il nous reste encore beaucoup à accomplir. En effet si le programme marche actuellement de façon tout à fait respectable, il reste de nombreuses améliorations à faire pour augmenter ses performances, sa fiabilité et son utilisation. Par exemple l'implémentation d'une interface graphique rendrait l'utilisation du Projet Nigma bien plus intuitive pour des utilisateurs lambda (comme Jeanne et Serge).
+
+Pour ce qui est de la stéganographie, actuellement le programme prend en paramètre une chaîne de caractère pour la cacher au sein d'une image, c'est pratique pour faire passer des messages comme \og à quelle heure a lieu la soutenance ? \fg{} qui ne sont pas cryptés au préalable. Mais une fois le message crypté on obtient une suite de chiffres passablement indigeste qui est difficile à recopier c'est pourquoi à l'avenir le programme prendra en paramètre un fichier dans lequel est stocké le produit du cryptage. Ainsi l'utilisateur ne perdra pas la vue en essayant de recopier le message crypté sans faire de fautes (qui seraient fatal à la conservation du sens du message). Un des autres objectifs futurs de la section stéganographie est l'implémentation de nouvelles techniques de camouflage : à l'instant ou vous lisez ces lignes le programme de stéganographie utilise une unique technique qui consiste à cacher un caractère dans 3 pixels en faisant varier de 1 au maximum les champs de couleur RGB des pixels. Cette technique est très discrète puisque le changement est imperceptible à l'\oe{}il nu (mis à part peut-être pour Jim Ellison) mais elle est limitée au niveau de la capacité de stockage : un caractère étant codé sur 9 bits, on ne peut en cacher que 160\,000 (espaces compris) dans une image de format bitmap $800 \times 600$, à première vue cela semble énorme mais une fois un message crypté (en RSA par exemple) celui-ci voit son nombre de caractère augmenter de façon tout à fait impressionnante. Le but est donc de trouver d'autres techniques possédant un bon ratio discrétion/capacité afin de proposer à l'utilisateur une gamme de méthodes qui conviendront à différents usages (une personne voulant juste cacher une phrase n'utilisera pas la même technique de stéganographie que la personne voulant faire circuler un roman de manière illicite).
 
 \newpage
 
