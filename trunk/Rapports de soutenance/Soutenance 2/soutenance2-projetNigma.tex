@@ -36,8 +36,21 @@
 	
 	Un petit exemple : Alice veut envoyer un message confidentiel à Bob. Bob crée donc un jeu de clé RSA puis envoie la clé publique à Alice. Alice crée sa clé DES, puis chiffre son message à envoyer avec cette clé. Finalement, elle envoie à Bob sa clé DES chiffrée avec la clé publique RSA ainsi que le message chiffré avec la clés DES. Bob reçoit donc les deux fichiers, avec sa clé privé RSA il déchiffrer le fichier de clé envoyé apr Alice, puis avec la clé DES qu'il vient de déchiffrer il peut déchiffrer le message d'Alice !
 	
-	Le DES a été achevé en 1977, c'est donc un algorithme de chiffrement ancien. Sa sécurité n'est plus optimal, en effet un état peut casser une clé DES en quelque minutes maintenant. Cepandant nons pensons qu'il est intéressant de se pencher sur cet algorithme qui fût un des premiers algorithmes de chiffrement symétrique défini rigouresement. 
+	Le DES a été achevé en 1977, c'est donc un algorithme de chiffrement ancien. Sa sécurité n'est plus optimal, en effet un état peut casser une clé DES en quelque minutes maintenant. Cepandant nons pensons qu'il est intéressant de se pencher sur cet algorithme qui fût un des premiers algorithmes de chiffrement symétrique défini rigoureusement.
+	
+	Du fait de son ancienneté les spécifications du DES étaient prévus pour une réalisation matérielle. C'est à dire pour que ce soit des puces qui réalisent le chiffrement. Ainsi certaines partie du protocole sont faciles à réaliser sur une puce mais sont difficile à réaliser en Ocaml. Nous développerons dans nos parties respectives.
+
+\newpage
+
 \subsection{Partie de Guillaume Lapôtre}
+	Pour implémenter le DES en Ocaml je me suis tout d'abord documenté sur cet algorithme de chiffrement complexe bien qu'utilisant que des opérations basiques	(en effet le DES est optimisé pour une réalisation matérielle \dots). Je me suis donc basé sur un livre qui m'a été bien utile pour la l'implémentation de RSA qui se nomme "Cryptographie Appliquée" par Bruce Schenier. Ce livre est très pratique car il explique très bien comment fonctionne un bon nombre d'algorithme de chiffrement et il y a aussi l'histoire de chaque algorithme : Comment il a été créé, par qui, suite à quels besoins etc\ldots 
+	
+	J'ai donc tout d'abord commencé par la création d'un clé DES. Sa création fût bien plus simple que la création d'une paire de clé RSA. En effet, la génération des clefs RSA nécessitent de possèder au préalable de grands nombres premiers qui furent quelque peu difficile à obtenir. Une clé DES est un nombre de 64 bits. Puis le DES ne se sert que de 56 bits des 64 bits présents initialement. Les 8 bits inutilisés sont des bits de parités. Ils servent à vérifier lorsque l'on envoie la clé que la clé reçue n'est pas corompue. C'est à dire qu'aucun bit n'a changé au court du transfert. Ainsi, une clé DES à la propriété d'avoir un nombre pair de bits à 1 pour chaque octet. Ce sont les 8 bits de parité qui permettent d'assurer cette propriété.
+	
+	Je me suis ensuite occupé des différentes fonctions de manipulation de la clef. Tout d'abord il y a une permutation de clef qui réarrange les bits dans un ordre prédéfini et qui ignore les bits de parité. On se retrouve donc avec une clé de 56 bits. Ensuite à chaque ronde du DES (le protocole exacte d'une ronde du DES sera expliquée par Sébastien), on sépare la clé en deux sous-clés de 28 bits chacune et on effectue une ou deux rotations gauche suivant la ronde que l'on est en train d'effectuer. Ensuite on réassemble les deux sous clé puis on effectue une permutation compressive qui compresse la clé qui était de 56 bits en une clé de 48 bits. L'orde de lequel les bits sont réarrangés est spécifié dans le DES. Ainsi j'ai pu générer les 16 sous-clés requises pour le chiffrement d'un bloc.
+	
+	Je me suis ensuite occupé d'une toute autre partie qui est la gestion des S-box ou tables de substitution.
+
 \newpage
 \subsection {Partie de Sébastien Gislais}
 \newpage
