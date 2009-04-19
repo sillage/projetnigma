@@ -143,6 +143,7 @@ De nos jours, il est conseillé d'utiliser des clés de plus de 1024 bits pour l
 \newpage
 
 \section{Stéganographie}
+
 \subsection{Partie Explication Stéganographie}
 
 La stéganographie est l'art de cacher un message secret. Dans le projet Nigma, nous cachons ce message dans une image. Les images que nous utilisons pour le moment sont au format BMP. Le format BMP est constitué d'un header qui sert d'en-tête au fichier. Ce header fait 54 octets. Il est très important car il permet de connaitre les propriétés du fichier et de l'image comme le nombre de bits par pixel ou la taille de l'image. Il ne faut surtout pas toucher à ce header sinon l'image de base sera modifiée voire même illisible pour les logiciels de visualisation. Ainsi quand nous lisons l'image, nous sautons ces 54 octets qu'il ne faut pas toucher et nous les écrivons tels quels dans la future image.
@@ -157,9 +158,9 @@ Un caractère va jusqu’à 255 en non signé. Si par hasard le caractère de l'
 
 Une fois la chaine de bits finie, on rajoute une marque de fin de niveau. Cette marque sert pour le décodage du message. Nous avons donc décidé de mettre cette marque de fin de message à 255 255 255. Pour éviter d'interrompre le message trop tôt en mettant une marque de fin de message involontaire, on interdit la valeur 255. Si la valeur est à 254 et que l'on doit incrémenter ce caractère, on le décrémente de 1.
 
-\begin{center}
-  \includegraphics[scale=0.30]{pixel.jpg}
-\end{center}
+%\begin{center}
+%  \includegraphics[scale=0.30]{pixel.jpg}
+%\end{center}
 
 \subsection{Partie de Justin Ganivet}
 
